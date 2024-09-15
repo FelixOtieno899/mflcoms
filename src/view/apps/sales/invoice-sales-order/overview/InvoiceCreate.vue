@@ -161,7 +161,7 @@
           </sdCards>
         </BorderLessHeading>
       </a-col>
-
+  
       <a-drawer
         :width="modalWidth"
         title="Add Delivery Notes"
@@ -169,7 +169,7 @@
         :body-style="{ paddingBottom: '80px' }"
         :footer-style="{ textAlign: 'right' }"
         @close="handleCancelAddDeliveryNote"
-      >
+        >
         <BasicFormWrapper>
           <a-form layout="vertical">
             <div style="display: flex; justify-content: end">
@@ -286,7 +286,7 @@ import { defineComponent, reactive, ref, onMounted, computed } from "vue";
 import { Main, BorderLessHeading } from "../../../../styled";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import { nextTick } from "vue";
+
 
 export default defineComponent({
   name: "Invoicecreate",
@@ -411,8 +411,7 @@ export default defineComponent({
       }
 
       try {
-        await fetchDeliveryNotes();
-        await nextTick();
+     
         isAddDeliveryNote.value = true;
       } catch (error) {
         console.error("Error opening modal:", error);
@@ -671,7 +670,7 @@ export default defineComponent({
     };
 
     const isCollapsed = (index) => {
-      return !collapsedIndexes.value.includes(index);
+      return collapsedIndexes.value.includes(index);
     };
 
     const toggleCollapse = (index) => {
