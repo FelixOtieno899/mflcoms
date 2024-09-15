@@ -622,6 +622,11 @@ export default defineComponent({
 
     const open = ref(false);
     const showDrawer = () => {
+        if (!form.client_id) {
+          toast.error("Please select a client before adding delivery notes.");
+          return;
+        }
+  
       open.value = true;
     };
     const onClose = () => {
