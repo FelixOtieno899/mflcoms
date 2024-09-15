@@ -161,7 +161,7 @@
           </sdCards>
         </BorderLessHeading>
       </a-col>
-  
+
       <a-drawer
         :width="modalWidth"
         title="Add Delivery Notes"
@@ -169,7 +169,7 @@
         :body-style="{ paddingBottom: '80px' }"
         :footer-style="{ textAlign: 'right' }"
         @close="handleCancelAddDeliveryNote"
-        >
+      >
         <BasicFormWrapper>
           <a-form layout="vertical">
             <div style="display: flex; justify-content: end">
@@ -287,7 +287,6 @@ import { Main, BorderLessHeading } from "../../../../styled";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 
-
 export default defineComponent({
   name: "Invoicecreate",
   components: {
@@ -404,14 +403,13 @@ export default defineComponent({
       }
     };
 
-    const openAddDeliveryNoteModal = async () => {
+    const openAddDeliveryNoteModal = () => {
       if (!form.client_id) {
         toast.error("Please select a client before adding delivery notes.");
         return;
       }
 
       try {
-     
         isAddDeliveryNote.value = true;
       } catch (error) {
         console.error("Error opening modal:", error);
@@ -795,9 +793,6 @@ th {
 .setting-form-actions {
   margin-top: 20px;
 }
-
-
-
 
 .collapsible-section {
   margin-bottom: 10px;
