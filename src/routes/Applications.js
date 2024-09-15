@@ -587,7 +587,7 @@ export default [
         name: "CreditNote",
         component: () =>
             import(
-                /* webpackChunkName: "CreditNote */ "../view/apps/sales/credit-note/CreditNote.vue"
+                /* webpackChunkName: "CreditNote" */ "../view/apps/sales/credit-note/CreditNote.vue"
             ),
         props: true,
     },

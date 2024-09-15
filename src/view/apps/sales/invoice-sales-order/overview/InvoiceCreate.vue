@@ -162,13 +162,13 @@
         </BorderLessHeading>
       </a-col>
 
-      <Modal
+      <a-drawer
         :width="modalWidth"
         title="Add Delivery Notes"
-        class="full-width-modal"
-        :visible="isAddDeliveryNote"
-        :footer="null"
-        @cancel="handleCancelAddDeliveryNote"
+        v-model:visible="isAddDeliveryNote"
+        :body-style="{ paddingBottom: '80px' }"
+        :footer-style="{ textAlign: 'right' }"
+        @close="handleCancelAddDeliveryNote"
       >
         <BasicFormWrapper>
           <a-form layout="vertical">
@@ -275,7 +275,7 @@
             </div>
           </a-form>
         </BasicFormWrapper>
-      </Modal>
+      </a-drawer>
     </a-row>
   </Main>
 </template>
@@ -287,15 +287,12 @@ import { Main, BorderLessHeading } from "../../../../styled";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { nextTick } from "vue";
-import { Modal } from 'ant-design-vue';
-
 
 export default defineComponent({
   name: "Invoicecreate",
   components: {
     Main,
     BorderLessHeading,
-    Modal
   },
   setup() {
     const router = useRouter();
@@ -309,7 +306,7 @@ export default defineComponent({
     let currentNumber = ref(1000);
     const searchQuery = ref("");
     const adjustment = ref(false);
-    const modalWidth = ref("1200vw");
+    const modalWidth = ref("100vw");
 
     const collapsedIndexes = ref([]);
 
@@ -800,37 +797,8 @@ th {
   margin-top: 20px;
 }
 
-.full-width-modal .ant-modal {
-  width: 100vw !important;
-  max-width: 100vw !important;
-}
 
 
-.full-width-modal .ant-modal {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    top: 0;
-    margin: 0;
-    border-radius: 0;
-  }
-  
-  .full-width-modal .ant-modal-body {
-    overflow-y: auto;
-  }
-  
-
-  .full-width-modal{
-    width: 100vw !important;
-    max-width: 100vw !important;
-    top: 0;
-    margin: 0;
-    border-radius: 0;
-  }
-  
-  .full-width-modal{
-    overflow-y: auto;
-  }
-  
 
 .collapsible-section {
   margin-bottom: 10px;
