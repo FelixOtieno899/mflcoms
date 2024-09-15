@@ -1,0 +1,93 @@
+[
+    {
+        "id": "1",
+        "type": "primary",
+        "icon": "briefcase-alt",
+        "total": "100",
+        "suffix": "+",
+        "prefix": "",
+        "label": "Total Insurers",
+        "growth": "downward",
+        "growthRate": "15.65",
+        "dataPeriod": "Since Last Month",
+        "decimal": 0
+    },
+    {
+        "id": "2",
+        "type": "secondary",
+        "icon": "shopping-cart",
+        "total": "30825",
+        "suffix": "",
+        "prefix": "",
+        "label": "Total Orders",
+        "growth": "upward",
+        "growthRate": "25.36",
+        "dataPeriod": "Since Last Month",
+        "decimal": 0
+    },
+    {
+        "id": "3",
+        "type": "warning",
+        "icon": "usd-circle",
+        "total": "35457",
+        "suffix": "",
+        "prefix": "$",
+        "label": "Total Invoices",
+        "growth": "downward",
+        "growthRate": "12.25",
+        "dataPeriod": "Since Last Month",
+        "decimal": 0
+    },
+    {
+        "id": "4",
+        "type": "info",
+        "icon": "users-alt",
+        "total": "1426",
+        "suffix": "+",
+        "prefix": "",
+        "label": "Total Drivers",
+        "growth": "upward",
+        "growthRate": "33.24",
+        "dataPeriod": "Since Last Month",
+        "decimal": 0
+    },
+    {
+        "id": "5",
+        "type": "primary",
+        "icon": "arrow-growth",
+        "total": "30825",
+        "suffix": "",
+        "prefix": "",
+        "label": "Total Traffic",
+        "growth": "upward",
+        "growthRate": "25.36",
+        "dataPeriod": "Since Last Month",
+        "decimal": 0
+    },
+    {
+        "id": "6",
+        "type": "secondary",
+        "icon": "users-alt",
+        "total": "2850",
+        "suffix": "",
+        "prefix": "",
+        "label": "Total Clients",
+        "growth": "upward",
+        "growthRate": "9.36",
+        "dataPeriod": "Since Last Month",
+        "decimal": 0
+    },
+    {
+        "id": "7",
+        "type": "success",
+        "icon": "usd-circle",
+        "total": "529",
+        "suffix": "",
+        "prefix": "",
+        "label": "Total Drivers",
+        "growth": "downward",
+        "growthRate": "12.36",
+        "dataPeriod": "Since Last Month",
+        "decimal": 0
+    }
+]
