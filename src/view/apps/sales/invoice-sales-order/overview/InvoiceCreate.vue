@@ -62,10 +62,7 @@
                         </tr>
                         <tr>
                           <td colspan="7">
-                            <a-button
-                              type="primary"
-                              @click="openAddDeliveryNoteModal"
-                            >
+                            <a-button type="primary" @click="showDrawer">
                               Add Delivery Notes
                             </a-button>
                           </td>
@@ -165,7 +162,7 @@
       <a-drawer
         :width="modalWidth"
         title="Add Delivery Notes"
-        v-model:visible="isAddDeliveryNote"
+        v-model:visible="open"
         :body-style="{ paddingBottom: '80px' }"
         :footer-style="{ textAlign: 'right' }"
         @close="handleCancelAddDeliveryNote"
@@ -403,19 +400,19 @@ export default defineComponent({
       }
     };
 
-    const openAddDeliveryNoteModal = () => {
-      if (!form.client_id) {
-        toast.error("Please select a client before adding delivery notes.");
-        return;
-      }
+    // const openAddDeliveryNoteModal = () => {
+    //   if (!form.client_id) {
+    //     toast.error("Please select a client before adding delivery notes.");
+    //     return;
+    //   }
 
-      try {
-        isAddDeliveryNote.value = true;
-      } catch (error) {
-        console.error("Error opening modal:", error);
-        toast.error("An error occurred while opening the modal.");
-      }
-    };
+    //   try {
+    //     isAddDeliveryNote.value = true;
+    //   } catch (error) {
+    //     console.error("Error opening modal:", error);
+    //     toast.error("An error occurred while opening the modal.");
+    //   }
+    // };
 
     const filteredDeliveryNotes = computed(() => {
       if (searchQuery.value) {
@@ -441,7 +438,6 @@ export default defineComponent({
           currentNumber.value = 1000;
         }
         form.invoice_number = generateSequentialNumber();
-        open.value = true;
       } catch (error) {
         console.error(
           "Error fetching last invoice number or showing drawer:",
@@ -482,7 +478,7 @@ export default defineComponent({
       });
 
       updateSubtotalAndTotal();
-      isAddDeliveryNote.value = false;
+      open.value = false;
     };
 
     const updateSubtotalAndTotal = () => {
@@ -495,7 +491,7 @@ export default defineComponent({
     };
 
     const handleCancelAddDeliveryNote = () => {
-      isAddDeliveryNote.value = false;
+      open.value = false;
     };
 
     const handleSubmit = async () => {
@@ -624,6 +620,10 @@ export default defineComponent({
 
     const open = ref(false);
     const showDrawer = () => {
+      if (!form.client_id) {
+        toast.error("Please select a client before adding delivery notes.");
+        return;
+      }
       open.value = true;
     };
     const onClose = () => {
@@ -694,7 +694,7 @@ export default defineComponent({
       updateLineTotal,
       adjustmentChecked,
       handleAdjustmentChange,
-      openAddDeliveryNoteModal,
+      //  openAddDeliveryNoteModal,
       handleSaveDelivery,
       handleCancelAddDeliveryNote,
       filteredDeliveryNotes,
