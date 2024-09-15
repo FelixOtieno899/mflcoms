@@ -162,15 +162,13 @@
         </BorderLessHeading>
       </a-col>
 
-      <!-- Add Delivery Notes Modal -->
-      <a-modal
+      <Modal
         :width="modalWidth"
         title="Add Delivery Notes"
         class="full-width-modal"
-        :type="modalType"
         :visible="isAddDeliveryNote"
         :footer="null"
-        :onCancel="handleCancelAddDeliveryNote"
+        @cancel="handleCancelAddDeliveryNote"
       >
         <BasicFormWrapper>
           <a-form layout="vertical">
@@ -193,14 +191,13 @@
               </p>
             </template>
 
-            <a-collapse v-else>
-              <a-collapse-panel
+            <template v-else>
+              <div
                 v-for="(note, index) in filteredDeliveryNotes"
                 :key="index"
-                :header="header"
-                class="note-collapse-panel"
+                class="collapsible-section"
               >
-                <template #header>
+                <div class="collapsible-header" @click="toggleCollapse(index)">
                   <div
                     style="
                       display: flex;
@@ -212,7 +209,7 @@
                     <span style="margin-left: 80px">
                       Delivery Note #{{ note.delivery_note_number }}
                     </span>
-
+                    <!-- Container counts -->
                     <span v-if="getContainerCount(note).twentyFT > 0">
                       20FT Count: {{ getContainerCount(note).twentyFT }}
                     </span>
@@ -229,32 +226,24 @@
                       Loose Cargo Count:
                       {{ getContainerCount(note).looseCargo }}
                     </span>
-
                     <span style="margin-right: 300px">
-                      Off Loading Point:
-                      {{ note.destination }}
+                      Off Loading Point: {{ note.destination }}
                     </span>
-
                     <a-checkbox
                       :checked="note.selected"
                       @change="() => toggleNoteSelection(note)"
                     />
                   </div>
-                </template>
+                </div>
 
-                <div class="note-details">
+                <div v-if="isCollapsed(index)" class="collapsible-content">
                   <p>
-                    <strong>Loading Point:</strong>
-                    {{ note.pick_up_location }}
+                    <strong>Loading Point:</strong> {{ note.pick_up_location }}
                   </p>
                   <p>
-                    <strong>Off Loading Point:</strong>
-                    {{ note.destination }}
+                    <strong>Off Loading Point:</strong> {{ note.destination }}
                   </p>
-                  <p>
-                    <strong>Date:</strong>
-                    {{ note.delivery_date }}
-                  </p>
+                  <p><strong>Date:</strong> {{ note.delivery_date }}</p>
 
                   <a-table
                     :dataSource="note.items"
@@ -262,8 +251,8 @@
                     :pagination="false"
                   />
                 </div>
-              </a-collapse-panel>
-            </a-collapse>
+              </div>
+            </template>
 
             <div class="ninjadash-modal-actions" style="margin-top: 20px">
               <sdButton
@@ -286,7 +275,7 @@
             </div>
           </a-form>
         </BasicFormWrapper>
-      </a-modal>
+      </Modal>
     </a-row>
   </Main>
 </template>
@@ -298,12 +287,15 @@ import { Main, BorderLessHeading } from "../../../../styled";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { nextTick } from "vue";
+import { Modal } from 'ant-design-vue';
+
 
 export default defineComponent({
   name: "Invoicecreate",
   components: {
     Main,
     BorderLessHeading,
+    Modal
   },
   setup() {
     const router = useRouter();
@@ -318,6 +310,8 @@ export default defineComponent({
     const searchQuery = ref("");
     const adjustment = ref(false);
     const modalWidth = ref("1200vw");
+
+    const collapsedIndexes = ref([]);
 
     const generateSequentialNumber = () => {
       currentNumber.value += 1;
@@ -679,6 +673,20 @@ export default defineComponent({
       return containerCounts;
     };
 
+    const isCollapsed = (index) => {
+      return !collapsedIndexes.value.includes(index);
+    };
+
+    const toggleCollapse = (index) => {
+      if (collapsedIndexes.value.includes(index)) {
+        collapsedIndexes.value = collapsedIndexes.value.filter(
+          (i) => i !== index
+        );
+      } else {
+        collapsedIndexes.value.push(index);
+      }
+    };
+
     return {
       form,
       open,
@@ -706,6 +714,8 @@ export default defineComponent({
       getContainerCount,
       formatNumberWithCommas,
       modalWidth,
+      isCollapsed,
+      toggleCollapse,
     };
   },
 });
@@ -793,5 +803,46 @@ th {
 .full-width-modal .ant-modal {
   width: 100vw !important;
   max-width: 100vw !important;
+}
+
+
+.full-width-modal .ant-modal {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    top: 0;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .full-width-modal .ant-modal-body {
+    overflow-y: auto;
+  }
+  
+
+  .full-width-modal{
+    width: 100vw !important;
+    max-width: 100vw !important;
+    top: 0;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .full-width-modal{
+    overflow-y: auto;
+  }
+  
+
+.collapsible-section {
+  margin-bottom: 10px;
+}
+.collapsible-header {
+  cursor: pointer;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 4px;
+}
+.collapsible-content {
+  padding: 10px;
+  border-top: 1px solid #ddd;
 }
 </style>
