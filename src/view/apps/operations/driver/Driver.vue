@@ -24,7 +24,7 @@
                                     :body-style="{ paddingBottom: '80px' }"
                                     :footer-style="{ textAlign: 'right' }"
                                     @close="onClose"
-                                >
+                                  >
                                     <template v-if="isLoading">
                                         <a-space class="loading">
                                             <a-spin size="large" />

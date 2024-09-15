@@ -157,122 +157,124 @@
             </a-row>
           </sdCards>
         </BorderLessHeading>
-      </a-col>
 
+        
       <a-drawer
-        :width="modalWidth"
-        title="Add Delivery Notes"
-        v-model:visible="open"
-        :body-style="{ paddingBottom: '80px' }"
-        :footer-style="{ textAlign: 'right' }"
-        @close="handleCancelAddDeliveryNote"
-      >
-        <BasicFormWrapper>
-          <a-form layout="vertical">
-            <div style="display: flex; justify-content: end">
-              <a-input
-                v-model:value="searchQuery"
-                placeholder="Search..."
-                allowClear
-                style="margin-bottom: 20px; width: 250px"
-              >
-                <template #prefix>
-                  <unicon name="search"></unicon>
-                </template>
-              </a-input>
-            </div>
+      :width="modalWidth"
+      title="Add Delivery Notes"
+      v-model:visible="open"
+      :body-style="{ paddingBottom: '80px' }"
+      :footer-style="{ textAlign: 'right' }"
+      @close="handleCancelAddDeliveryNote"
+    >
+      <!-- <BasicFormWrapper>
+        <a-form layout="vertical">
+          <div style="display: flex; justify-content: end">
+            <a-input
+              v-model:value="searchQuery"
+              placeholder="Search..."
+              allowClear
+              style="margin-bottom: 20px; width: 250px"
+            >
+              <template #prefix>
+                <unicon name="search"></unicon>
+              </template>
+            </a-input>
+          </div>
 
-            <template v-if="filteredDeliveryNotes.length === 0">
-              <p style="text-align: center; color: red">
-                No delivery notes found.
-              </p>
-            </template>
+          <template v-if="filteredDeliveryNotes.length === 0">
+            <p style="text-align: center; color: red">
+              No delivery notes found.
+            </p>
+          </template>
 
-            <template v-else>
-              <div
-                v-for="(note, index) in filteredDeliveryNotes"
-                :key="index"
-                class="collapsible-section"
-              >
-                <div class="collapsible-header" @click="toggleCollapse(index)">
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      align-items: center;
-                      width: 100%;
-                    "
-                  >
-                    <span style="margin-left: 80px">
-                      Delivery Note #{{ note.delivery_note_number }}
-                    </span>
-                    <!-- Container counts -->
-                    <span v-if="getContainerCount(note).twentyFT > 0">
-                      20FT Count: {{ getContainerCount(note).twentyFT }}
-                    </span>
-                    <span v-if="getContainerCount(note).fortyFT > 0">
-                      40FT Count: {{ getContainerCount(note).fortyFT }}
-                    </span>
-                    <span v-if="getContainerCount(note).twentyFTE > 0">
-                      20FTE Count:{{ getContainerCount(note).twentyFTE }}
-                    </span>
-                    <span v-if="getContainerCount(note).fortyFTE > 0">
-                      {{ getContainerCount(note).fortyFTE }}x40FTE
-                    </span>
-                    <span v-if="getContainerCount(note).looseCargo > 0">
-                      Loose Cargo Count:
-                      {{ getContainerCount(note).looseCargo }}
-                    </span>
-                    <span style="margin-right: 300px">
-                      Off Loading Point: {{ note.destination }}
-                    </span>
-                    <a-checkbox
-                      :checked="note.selected"
-                      @change="() => toggleNoteSelection(note)"
-                    />
-                  </div>
-                </div>
-
-                <div v-if="isCollapsed(index)" class="collapsible-content">
-                  <p>
-                    <strong>Loading Point:</strong> {{ note.pick_up_location }}
-                  </p>
-                  <p>
-                    <strong>Off Loading Point:</strong> {{ note.destination }}
-                  </p>
-                  <p><strong>Date:</strong> {{ note.delivery_date }}</p>
-
-                  <a-table
-                    :dataSource="note.items"
-                    :columns="itemColumns"
-                    :pagination="false"
+          <template v-else>
+            <div
+              v-for="(note, index) in filteredDeliveryNotes"
+              :key="index"
+              class="collapsible-section"
+            >
+              <div class="collapsible-header" @click="toggleCollapse(index)">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                  "
+                >
+                  <span style="margin-left: 80px">
+                    Delivery Note #{{ note.delivery_note_number }}
+                  </span>
+                
+                  <span v-if="getContainerCount(note).twentyFT > 0">
+                    20FT Count: {{ getContainerCount(note).twentyFT }}
+                  </span>
+                  <span v-if="getContainerCount(note).fortyFT > 0">
+                    40FT Count: {{ getContainerCount(note).fortyFT }}
+                  </span>
+                  <span v-if="getContainerCount(note).twentyFTE > 0">
+                    20FTE Count:{{ getContainerCount(note).twentyFTE }}
+                  </span>
+                  <span v-if="getContainerCount(note).fortyFTE > 0">
+                    {{ getContainerCount(note).fortyFTE }}x40FTE
+                  </span>
+                  <span v-if="getContainerCount(note).looseCargo > 0">
+                    Loose Cargo Count:
+                    {{ getContainerCount(note).looseCargo }}
+                  </span>
+                  <span style="margin-right: 300px">
+                    Off Loading Point: {{ note.destination }}
+                  </span>
+                  <a-checkbox
+                    :checked="note.selected"
+                    @change="() => toggleNoteSelection(note)"
                   />
                 </div>
               </div>
-            </template>
 
-            <div class="ninjadash-modal-actions" style="margin-top: 20px">
-              <sdButton
-                size="sm"
-                type="light"
-                key="cancel"
-                outlined
-                @click.prevent="handleCancelAddDeliveryNote"
-              >
-                Cancel
-              </sdButton>
-              <sdButton
-                @click="handleSaveDelivery"
-                htmlType="submit"
-                size="sm"
-                type="primary"
-              >
-                Save
-              </sdButton>
+              <div v-if="isCollapsed(index)" class="collapsible-content">
+                <p>
+                  <strong>Loading Point:</strong> {{ note.pick_up_location }}
+                </p>
+                <p>
+                  <strong>Off Loading Point:</strong> {{ note.destination }}
+                </p>
+                <p><strong>Date:</strong> {{ note.delivery_date }}</p>
+
+                <a-table
+                  :dataSource="note.items"
+                  :columns="itemColumns"
+                  :pagination="false"
+                />
+              </div>
             </div>
-          </a-form>
-        </BasicFormWrapper>
-      </a-drawer>
+          </template>
+
+          <div class="ninjadash-modal-actions" style="margin-top: 20px">
+            <sdButton
+              size="sm"
+              type="light"
+              key="cancel"
+              outlined
+              @click.prevent="handleCancelAddDeliveryNote"
+            >
+              Cancel
+            </sdButton>
+            <sdButton
+              @click="handleSaveDelivery"
+              htmlType="submit"
+              size="sm"
+              type="primary"
+            >
+              Save
+            </sdButton>
+          </div>
+        </a-form>
+      </BasicFormWrapper> -->
+    </a-drawer>
+      </a-col>
+
     </a-row>
   </Main>
 </template>
