@@ -167,7 +167,7 @@
       :footer-style="{ textAlign: 'right' }"
       @close="handleCancelAddDeliveryNote"
     >
-      <!-- <BasicFormWrapper>
+      <BasicFormWrapper>
         <a-form layout="vertical">
           <div style="display: flex; justify-content: end">
             <a-input
@@ -242,11 +242,11 @@
                 </p>
                 <p><strong>Date:</strong> {{ note.delivery_date }}</p>
 
-                <a-table
+                <!-- <a-table
                   :dataSource="note.items"
                   :columns="itemColumns"
                   :pagination="false"
-                />
+                /> -->
               </div>
             </div>
           </template>
@@ -271,7 +271,7 @@
             </sdButton>
           </div>
         </a-form>
-      </BasicFormWrapper> -->
+      </BasicFormWrapper>
     </a-drawer>
       </a-col>
 
