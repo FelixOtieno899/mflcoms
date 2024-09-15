@@ -166,7 +166,7 @@
       :body-style="{ paddingBottom: '80px' }"
       :footer-style="{ textAlign: 'right' }"
       @close="handleCancelAddDeliveryNote"
-    >
+      >
       <BasicFormWrapper>
         <a-form layout="vertical">
           <div style="display: flex; justify-content: end">
@@ -207,7 +207,7 @@
                     Delivery Note #{{ note.delivery_note_number }}
                   </span>
                 
-                  <span v-if="getContainerCount(note).twentyFT > 0">
+                  <!-- <span v-if="getContainerCount(note).twentyFT > 0">
                     20FT Count: {{ getContainerCount(note).twentyFT }}
                   </span>
                   <span v-if="getContainerCount(note).fortyFT > 0">
@@ -225,7 +225,7 @@
                   </span>
                   <span style="margin-right: 300px">
                     Off Loading Point: {{ note.destination }}
-                  </span>
+                  </span> -->
                   <a-checkbox
                     :checked="note.selected"
                     @change="() => toggleNoteSelection(note)"
@@ -242,11 +242,11 @@
                 </p>
                 <p><strong>Date:</strong> {{ note.delivery_date }}</p>
 
-                <!-- <a-table
+                <a-table
                   :dataSource="note.items"
                   :columns="itemColumns"
                   :pagination="false"
-                /> -->
+                />
               </div>
             </div>
           </template>
