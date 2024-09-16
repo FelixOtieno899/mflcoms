@@ -158,123 +158,126 @@
           </sdCards>
         </BorderLessHeading>
 
-        
-      <a-drawer
-      :width="modalWidth"
-      title="Add Delivery Notes"
-      v-model:visible="open"
-      :body-style="{ paddingBottom: '80px' }"
-      :footer-style="{ textAlign: 'right' }"
-      @close="handleCancelAddDeliveryNote"
-      >
-      <BasicFormWrapper>
-        <a-form layout="vertical">
-          <div style="display: flex; justify-content: end">
-            <a-input
-              v-model:value="searchQuery"
-              placeholder="Search..."
-              allowClear
-              style="margin-bottom: 20px; width: 250px"
-            >
-              <template #prefix>
-                <unicon name="search"></unicon>
-              </template>
-            </a-input>
-          </div>
-
-          <template v-if="filteredDeliveryNotes.length === 0">
-            <p style="text-align: center; color: red">
-              No delivery notes found.
-            </p>
-          </template>
-
-          <template v-else>
-            <div
-              v-for="(note, index) in filteredDeliveryNotes"
-              :key="index"
-              class="collapsible-section"
-            >
-              <div class="collapsible-header" @click="toggleCollapse(index)">
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    width: 100%;
-                  "
+        <a-drawer
+          :width="modalWidth"
+          title="Add Delivery Notes"
+          v-model:visible="open"
+          :body-style="{ paddingBottom: '80px' }"
+          :footer-style="{ textAlign: 'right' }"
+          @close="handleCancelAddDeliveryNote"
+        >
+          <BasicFormWrapper>
+            <a-form layout="vertical">
+              <div style="display: flex; justify-content: end">
+                <a-input
+                  v-model:value="searchQuery"
+                  placeholder="Search..."
+                  allowClear
+                  style="margin-bottom: 20px; width: 250px"
                 >
-                  <span style="margin-left: 80px">
-                    Delivery Note #{{ note.delivery_note_number }}
-                  </span>
-                
-                  <!-- <span v-if="getContainerCount(note).twentyFT > 0">
-                    20FT Count: {{ getContainerCount(note).twentyFT }}
-                  </span>
-                  <span v-if="getContainerCount(note).fortyFT > 0">
-                    40FT Count: {{ getContainerCount(note).fortyFT }}
-                  </span>
-                  <span v-if="getContainerCount(note).twentyFTE > 0">
-                    20FTE Count:{{ getContainerCount(note).twentyFTE }}
-                  </span>
-                  <span v-if="getContainerCount(note).fortyFTE > 0">
-                    {{ getContainerCount(note).fortyFTE }}x40FTE
-                  </span>
-                  <span v-if="getContainerCount(note).looseCargo > 0">
-                    Loose Cargo Count:
-                    {{ getContainerCount(note).looseCargo }}
-                  </span>
-                  <span style="margin-right: 300px">
-                    Off Loading Point: {{ note.destination }}
-                  </span> -->
-                  <a-checkbox
-                    :checked="note.selected"
-                    @change="() => toggleNoteSelection(note)"
-                  />
+                  <template #prefix>
+                    <unicon name="search"></unicon>
+                  </template>
+                </a-input>
+              </div>
+
+              <template v-if="filteredDeliveryNotes.length === 0">
+                <p style="text-align: center; color: red">
+                  No delivery notes found.
+                </p>
+              </template>
+
+              <template v-else>
+                <div
+                  v-for="(note, index) in filteredDeliveryNotes"
+                  :key="index"
+                  class="collapsible-section"
+                >
+                  <div
+                    class="collapsible-header"
+                    @click="toggleCollapse(index)"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        width: 100%;
+                      "
+                    >
+                      <span style="margin-left: 80px">
+                        Delivery Note #{{ note.delivery_note_number }}
+                      </span>
+
+                      <!-- Replace the container counts with precomputed ones -->
+                      <span v-if="note.containerCounts.twentyFT > 0">
+                        20FT Count: {{ note.containerCounts.twentyFT }}
+                      </span>
+                      <span v-if="note.containerCounts.fortyFT > 0">
+                        40FT Count: {{ note.containerCounts.fortyFT }}
+                      </span>
+                      <span v-if="note.containerCounts.twentyFTE > 0">
+                        20FTE Count: {{ note.containerCounts.twentyFTE }}
+                      </span>
+                      <span v-if="note.containerCounts.fortyFTE > 0">
+                        {{ note.containerCounts.fortyFTE }}x40FTE
+                      </span>
+                      <span v-if="note.containerCounts.looseCargo > 0">
+                        Loose Cargo Count: {{ note.containerCounts.looseCargo }}
+                      </span>
+                      <span style="margin-right: 300px">
+                        Off Loading Point: {{ note.destination }}
+                      </span>
+
+                      <a-checkbox
+                        :checked="note.selected"
+                        @change="() => toggleNoteSelection(note)"
+                      />
+                    </div>
+                  </div>
+
+                  <div v-if="isCollapsed(index)" class="collapsible-content">
+                    <p>
+                      <strong>Loading Point:</strong>
+                      {{ note.pick_up_location }}
+                    </p>
+                    <p>
+                      <strong>Off Loading Point:</strong> {{ note.destination }}
+                    </p>
+                    <p><strong>Date:</strong> {{ note.delivery_date }}</p>
+
+                    <a-table
+                      :dataSource="note.items"
+                      :columns="itemColumns"
+                      :pagination="false"
+                    />
+                  </div>
                 </div>
+              </template>
+
+              <div class="ninjadash-modal-actions" style="margin-top: 20px">
+                <sdButton
+                  size="sm"
+                  type="light"
+                  key="cancel"
+                  outlined
+                  @click.prevent="handleCancelAddDeliveryNote"
+                >
+                  Cancel
+                </sdButton>
+                <sdButton
+                  @click="handleSaveDelivery"
+                  htmlType="submit"
+                  size="sm"
+                  type="primary"
+                >
+                  Save
+                </sdButton>
               </div>
-
-              <div v-if="isCollapsed(index)" class="collapsible-content">
-                <p>
-                  <strong>Loading Point:</strong> {{ note.pick_up_location }}
-                </p>
-                <p>
-                  <strong>Off Loading Point:</strong> {{ note.destination }}
-                </p>
-                <p><strong>Date:</strong> {{ note.delivery_date }}</p>
-
-                <a-table
-                  :dataSource="note.items"
-                  :columns="itemColumns"
-                  :pagination="false"
-                />
-              </div>
-            </div>
-          </template>
-
-          <div class="ninjadash-modal-actions" style="margin-top: 20px">
-            <sdButton
-              size="sm"
-              type="light"
-              key="cancel"
-              outlined
-              @click.prevent="handleCancelAddDeliveryNote"
-            >
-              Cancel
-            </sdButton>
-            <sdButton
-              @click="handleSaveDelivery"
-              htmlType="submit"
-              size="sm"
-              type="primary"
-            >
-              Save
-            </sdButton>
-          </div>
-        </a-form>
-      </BasicFormWrapper>
-    </a-drawer>
+            </a-form>
+          </BasicFormWrapper>
+        </a-drawer>
       </a-col>
-
     </a-row>
   </Main>
 </template>
@@ -364,43 +367,43 @@ export default defineComponent({
       console.log("Adjustment checkbox value:", adjustment.value);
     };
 
-    const fetchDeliveryNotes = async () => {
-      try {
-        const response = await DataService.get(
-          `/delivery_notes/client/${form.client_id}`
-        );
+    // const fetchDeliveryNotes = async () => {
+    //   try {
+    //     const response = await DataService.get(
+    //       `/delivery_notes/client/${form.client_id}`
+    //     );
 
-        console.log(
-          "Delivery notes coming from backend",
-          response.data.Delivery_notes
-        );
+    //     console.log(
+    //       "Delivery notes coming from backend",
+    //       response.data.Delivery_notes
+    //     );
 
-        if (response.data && Array.isArray(response.data.Delivery_notes)) {
-          if (adjustment.value) {
-            deliveryNotes.value = response.data.Delivery_notes.map((note) => ({
-              ...note,
-              selected: false,
-            }));
-          } else {
-            deliveryNotes.value = response.data.Delivery_notes.filter(
-              (note) => !note.is_associated_with_invoice
-            ).map((note) => ({
-              ...note,
-              selected: false,
-            }));
-          }
+    //     if (response.data && Array.isArray(response.data.Delivery_notes)) {
+    //       if (adjustment.value) {
+    //         deliveryNotes.value = response.data.Delivery_notes.map((note) => ({
+    //           ...note,
+    //           selected: false,
+    //         }));
+    //       } else {
+    //         deliveryNotes.value = response.data.Delivery_notes.filter(
+    //           (note) => !note.is_associated_with_invoice
+    //         ).map((note) => ({
+    //           ...note,
+    //           selected: false,
+    //         }));
+    //       }
 
-          noItemsAvailable.value = deliveryNotes.value.length === 0;
-        } else {
-          deliveryNotes.value = [];
-          noItemsAvailable.value = true;
-        }
-      } catch (error) {
-        console.error("Error fetching delivery notes:", error);
-        toast.error("Error fetching delivery notes.");
-        noItemsAvailable.value = true;
-      }
-    };
+    //       noItemsAvailable.value = deliveryNotes.value.length === 0;
+    //     } else {
+    //       deliveryNotes.value = [];
+    //       noItemsAvailable.value = true;
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching delivery notes:", error);
+    //     toast.error("Error fetching delivery notes.");
+    //     noItemsAvailable.value = true;
+    //   }
+    // };
 
     // const openAddDeliveryNoteModal = () => {
     //   if (!form.client_id) {
@@ -415,6 +418,42 @@ export default defineComponent({
     //     toast.error("An error occurred while opening the modal.");
     //   }
     // };
+
+    const fetchDeliveryNotes = async () => {
+      try {
+        const response = await DataService.get(
+          `/delivery_notes/client/${form.client_id}`
+        );
+
+        if (response.data && Array.isArray(response.data.Delivery_notes)) {
+          const notes = response.data.Delivery_notes.map((note) => {
+            const containerCounts = getContainerCount(note); // Precompute counts
+            return {
+              ...note,
+              selected: false,
+              containerCounts, // Attach counts to each note
+            };
+          });
+
+          if (adjustment.value) {
+            deliveryNotes.value = notes;
+          } else {
+            deliveryNotes.value = notes.filter(
+              (note) => !note.is_associated_with_invoice
+            );
+          }
+
+          noItemsAvailable.value = deliveryNotes.value.length === 0;
+        } else {
+          deliveryNotes.value = [];
+          noItemsAvailable.value = true;
+        }
+      } catch (error) {
+        console.error("Error fetching delivery notes:", error);
+        toast.error("Error fetching delivery notes.");
+        noItemsAvailable.value = true;
+      }
+    };
 
     const filteredDeliveryNotes = computed(() => {
       if (searchQuery.value) {
@@ -622,11 +661,11 @@ export default defineComponent({
 
     const open = ref(false);
     const showDrawer = () => {
-        if (!form.client_id) {
-          toast.error("Please select a client before adding delivery notes.");
-          return;
-        }
-  
+      if (!form.client_id) {
+        toast.error("Please select a client before adding delivery notes.");
+        return;
+      }
+
       open.value = true;
     };
     const onClose = () => {
@@ -634,18 +673,18 @@ export default defineComponent({
     };
     const updateLineTotal = (index) => {
       const item = form.items[index];
-      item.lineTotal = (item.price * 1.16).toFixed(2); // Assuming tax is included in line total
+      item.lineTotal = (item.price * 1.16).toFixed(2);
       updateSubtotalAndTotal();
     };
 
     const getContainerCount = (note) => {
-      const containerCounts = reactive({
+      const containerCounts = {
         twentyFT: 0,
         fortyFT: 0,
         twentyFTE: 0,
         fortyFTE: 0,
         looseCargo: 0,
-      });
+      };
 
       note.items.forEach((item) => {
         switch (item.itemDescription) {
